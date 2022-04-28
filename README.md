@@ -15,3 +15,5 @@ Key Differences from Box Party:
 - Character specific HUD features are removed.
 - The combo indicator for the score counter was removed, since the combo system from Box Party is not included.
 - Death Message was removed to avoid potential conflicts with other mods.
+
+Feel free to do whatever you want with the code from this mod.
