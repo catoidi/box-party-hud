@@ -9,7 +9,7 @@ class BoxPartyDoomHUD : BaseStatusBar
 	HUDFont SmallFont; //default smallfont font for anything else.
 	HUDFont SBoxFont; //box party font
 	HUDFont CurrentFont; //current font chosen by user
-	cvar fontcvar, mugcvar, armoriconcvar, ammoiconcvar;
+	cvar fontcvar, mugcvar, armoriconcvar, ammoiconcvar, showarmorcvar;
 	
 	//stuff
 	bool HasAmmo1;
@@ -79,6 +79,7 @@ class BoxPartyDoomHUD : BaseStatusBar
 		mugcvar = cvar.findcvar("box_mugshot");
 		armoriconcvar = cvar.findcvar("box_armoricon");
 		ammoiconcvar = cvar.findcvar("box_ammoicon");
+		showarmorcvar = cvar.findcvar("box_alwaysarmor");
 	}
 
 	override void NewGame()
@@ -199,15 +200,33 @@ class BoxPartyDoomHUD : BaseStatusBar
 			case 3: DrawTexture(GetMugShot(1, MugShot.DISABLEOUCH|MugShot.DISABLERAMPAGE|MugShot.CUSTOM, "TAC"), GlobalOffset + (-32, -32), DI_ITEM_OFFSETS); break;
 		}
 		
-		if (BoxArmorInterpolator.GetValue() > 0) //show armor when not empty
+		if ((GetArmorAmount() > 0) || (showarmorcvar.GetBool() == true)) //show armor when not empty
 		{
 			DrawBar("graphics/boxhud/HUDBARH.png", "graphics/boxhud/HUDBARG.png", BoxArmorInterpolator.GetValue(), ArmorMax, GlobalOffset + (-142, -56), 0, SHADER_REVERSE, DI_ITEM_OFFSETS);
 			if (BoxArmorInterpolator.GetValue() > ArmorMax)
 			{
-				DrawBar("graphics/boxhud/HUDBARK.png", "graphics/boxhud/HUDBARH.png", BoxArmorInterpolator.GetValue(), ArmorMax * 2, GlobalOffset + (-142, -56), 0, SHADER_REVERSE, DI_ITEM_OFFSETS);
+				DrawBar("graphics/boxhud/HUDBARK.png", "graphics/boxhud/HUDBARH.png", BoxArmorInterpolator.GetValue() - ArmorMax, ArmorMax, GlobalOffset + (-142, -56), 0, SHADER_REVERSE, DI_ITEM_OFFSETS);
 			}
 			DrawString(NumberFont, FormatNumber(GetArmorAmount(), 0), GlobalOffset + (-48, -50), DI_ITEM_OFFSETS|DI_TEXT_ALIGN_RIGHT, Font.CR_GREEN);
-			DrawImage("sprites/loot/armor/ARMOB0.png", GlobalOffset + (-24, -36), DI_ITEM_OFFSETS);
+			if (armoriconcvar.GetBool() == false)
+			{
+				if (GetArmorAmount() > 100)
+				{
+					DrawImage("ARM2B0", GlobalOffset + (-22, -38), DI_ITEM_OFFSETS);
+				}
+				else if (GetArmorAmount() > 25)
+				{
+					DrawImage("ARM1B0", GlobalOffset + (-22, -38), DI_ITEM_OFFSETS);
+				}
+				else if (GetArmorAmount() > 0)
+				{
+					DrawImage("BON2A0", GlobalOffset + (-22, -38), DI_ITEM_OFFSETS);
+				}
+			}
+			else
+			{
+				DrawImage("graphics/boxhud/ARMORICON.png", GlobalOffset + (-24, -36), DI_ITEM_OFFSETS);
+			}
 		}
 		
 		//AMMO BARS
@@ -216,7 +235,7 @@ class BoxPartyDoomHUD : BaseStatusBar
 		[ammo1, ammo2, ammocount1, ammocount2] = GetCurrentAmmo();
 		textureid ammo1icon, ammo2icon;
 		
-		if (BoxArmorInterpolator.GetValue() > 0) {ArmorOffset = (0, -24);} //do armor offset if armor > 0
+		if ((GetArmorAmount() > 0) || (showarmorcvar.GetBool() == true)) {ArmorOffset = (0, -24);} //do armor offset if armor > 0
 		else {ArmorOffset = (0, 0);}
 		Ammo1Offset = (0, -20 * HasAmmo1);
 		Ammo2Offset = (0, -20 * HasAmmo2);
@@ -231,9 +250,14 @@ class BoxPartyDoomHUD : BaseStatusBar
 			ammo1icon = GetIcon(cplayer.readyweapon.ammo1, 0);
 			DrawBar("graphics/boxhud/HUDBARF.png", "graphics/boxhud/HUDBARE.png", BoxAmmoInterpolator.GetValue(), ammo1max, GlobalOffset + ArmorOffset + (-136, -52), 0, SHADER_REVERSE, DI_ITEM_OFFSETS);
 			DrawString(NumberFont, FormatNumber(ammocount1, 1), GlobalOffset + ArmorOffset + (-48, -49), DI_ITEM_OFFSETS|DI_TEXT_ALIGN_RIGHT, Font.CR_BLACK);
-			//DrawImage("graphics/boxhud/AMMOZ0.png", GlobalOffset + ArmorOffset + (-32, -52), DI_ITEM_OFFSETS);
-			//if (noammo1 == true) {DrawImage("graphics/boxhud/AMMOX0.png", GlobalOffset + ArmorOffset + (-32, -52), DI_ITEM_OFFSETS);}
-			DrawTexture(ammo1icon, GlobalOffset + ArmorOffset + (-24, -36), DI_ITEM_OFFSETS);
+			if (ammoiconcvar.GetBool() == true)
+			{
+				DrawImage("graphics/boxhud/AMMOA0.png", GlobalOffset + ArmorOffset + (-32, -52), DI_ITEM_OFFSETS);
+			}
+			else
+			{
+				DrawTexture(ammo1icon, GlobalOffset + ArmorOffset + (-24, -36), DI_ITEM_OFFSETS);
+			}
 			HasAmmo1 = true;
 		}
 		else {HasAmmo1 = false;}
@@ -243,9 +267,14 @@ class BoxPartyDoomHUD : BaseStatusBar
 			ammo2icon = GetIcon(cplayer.readyweapon.ammo2, 0);
 			DrawBar("graphics/boxhud/HUDBARF.png", "graphics/boxhud/HUDBARE.png", BoxAmmo2Interpolator.GetValue(), ammo2max, GlobalOffset + ArmorOffset + Ammo1Offset + (-136, -52), 0, SHADER_REVERSE, DI_ITEM_OFFSETS);
 			DrawString(NumberFont, FormatNumber(ammocount2, 1), GlobalOffset + ArmorOffset + Ammo1Offset + (-48, -49), DI_ITEM_OFFSETS|DI_TEXT_ALIGN_RIGHT, Font.CR_BLACK);
-			//DrawImage("graphics/boxhud/AMMOZ0.png", GlobalOffset + ArmorOffset + Ammo1Offset + (-32, -52), DI_ITEM_OFFSETS);
-			//if (noammo2 == true) {DrawImage("graphics/boxhud/AMMOX0.png", GlobalOffset + ArmorOffset + Ammo1Offset + (-32, -52), DI_ITEM_OFFSETS);}
-			DrawTexture(ammo2icon, GlobalOffset + ArmorOffset + Ammo1Offset + (-24, -36), DI_ITEM_OFFSETS);
+			if (ammoiconcvar.GetBool() == true)
+			{
+				DrawImage("graphics/boxhud/AMMOB0.png", GlobalOffset + ArmorOffset + Ammo1Offset + (-32, -52), DI_ITEM_OFFSETS);
+			}
+			else
+			{
+				DrawTexture(ammo2icon, GlobalOffset + ArmorOffset + Ammo1Offset + (-24, -36), DI_ITEM_OFFSETS);
+			}
 			HasAmmo2 = true;
 		}
 		else {HasAmmo2 = false;}
