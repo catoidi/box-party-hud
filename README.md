@@ -13,6 +13,7 @@ Features:
 
 Key Differences from Box Party:
 - Character specific HUD features are removed.
+- The reserve ammo and low ammo indicators were removed, for compatibility reasons.
 - The combo indicator for the score counter was removed, since the combo system from Box Party is not included.
 - Death Message was removed to avoid potential conflicts with other mods.
 
