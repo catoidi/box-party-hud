@@ -20,4 +20,5 @@ This mod also requires [GZDOOM 4.7 or above](https://zdoom.org/downloads), becau
 - Death Message was removed to avoid potential conflicts with other mods.
 
 Feel free to do whatever you want with the code from this mod.
+
 This uses the GPLv3 License because I grabbed some code from gzdoom.pk3.
