@@ -21,4 +21,4 @@ This mod also requires [GZDOOM 4.7 or above](https://zdoom.org/downloads), becau
 
 Feel free to do whatever you want with the code from this mod.
 
-This uses the GPLv3 License because I grabbed some code from gzdoom.pk3.
+This uses the GPLv3 License because [I grabbed some code from gzdoom.pk3.](https://github.com/coelckers/gzdoom/blob/master/wadsrc/static/zscript/ui/statusbar/doom_sbar.zs)
