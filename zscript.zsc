@@ -10,6 +10,7 @@ class BoxPartyDoomHUD : BaseStatusBar
 	HUDFont SBoxFont; //box party font
 	HUDFont CurrentFont; //current font chosen by user
 	cvar fontcvar, mugcvar, armoriconcvar, ammoiconcvar, showarmorcvar;
+	InventoryBarState invbar;
 	
 	//stuff
 	bool HasAmmo1;
@@ -74,6 +75,8 @@ class BoxPartyDoomHUD : BaseStatusBar
 		BoxAmmoInterpolator = DynamicValueInterpolator.Create(0, 0.25, 1, 50);
 		BoxAmmo2Interpolator = DynamicValueInterpolator.Create(0, 0.25, 1, 50);
 		BoxScoreInterpolator = DynamicValueInterpolator.Create(0, 0.25, 1, 9999999);
+		
+		invbar = InventoryBarState.Create();
 		
 		shakecvar = cvar.findcvar("box_hudshake");
 		mugcvar = cvar.findcvar("box_mugshot");
@@ -318,6 +321,16 @@ class BoxPartyDoomHUD : BaseStatusBar
 			DrawBar("graphics/boxhud/HUDBARJ.png", "graphics/boxhud/HUDBARI.png", OxygenLevel, MaxOxygen, GlobalOffset + TimeOffset + (-142, 32), 0, SHADER_REVERSE, DI_ITEM_OFFSETS);
 			DrawImage("graphics/boxhud/AIRICON.png", GlobalOffset + TimeOffset + (-32, 32), DI_ITEM_OFFSETS);
 			DrawString(NumberFont, FormatNumber(OxygenNumber), GlobalOffset + TimeOffset + (-48, 36), DI_ITEM_OFFSETS|DI_TEXT_ALIGN_RIGHT, OxygenColor);
+		}
+		
+		//inventory bar
+		if (CPlayer.mo.InvSel != null && !Level.NoInventoryBar && isInventoryBarVisible() == false)
+		{
+			DrawInventoryIcon(CPlayer.mo.InvSel, GlobalOffset + (-188, -12), DI_DIMDEPLETED);
+		}
+		if (isInventoryBarVisible())
+		{
+			DrawInventoryBar(invbar, GlobalOffset + (-268, -40), 3, DI_ITEM_LEFT_TOP);
 		}
 	}
 	
