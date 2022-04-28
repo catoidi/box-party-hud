@@ -8,7 +8,7 @@ Features:
 - Health, Armor, and Ammo bars.
 - Choose between default Mugshots or Box Party Mugshots.
 - Customizable HUD shake.
-- Optional time, score, kill, item, and secret counters.
+- Optional time and score counters.
 - Customizable fonts.
 
 Key Differences from Box Party:
