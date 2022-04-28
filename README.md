@@ -5,10 +5,10 @@ This mod replaces the default GZDOOM HUD with the one from Box Party, with most 
 This mod is incompatible with Box Party.
 
 Features:
--Health, Armor, and Ammo bars.
--Choose between default Mugshots or Box Party Mugshots.
--Customizable HUD shake.
--Optional time, score, kill, item, and secret counters.
--Customizable fonts.
+- Health, Armor, and Ammo bars.
+- Choose between default Mugshots or Box Party Mugshots.
+- Customizable HUD shake.
+- Optional time, score, kill, item, and secret counters.
+- Customizable fonts.
 
 Licensed under GPLv3.
