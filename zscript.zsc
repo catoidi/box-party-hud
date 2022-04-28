@@ -280,35 +280,15 @@ class BoxPartyDoomHUD : BaseStatusBar
 		else {HasAmmo2 = false;}
 		
 		//KEYS
-		bool locks[8];
-		String keyimage;
-		int missingkey;
-		for(int i = 0; i < 8; i++) 
+		Vector2 keypos = (10, -2);
+		for(let i = CPlayer.mo.Inv; i != null; i = i.Inv)
 		{
-			if (i == 0) {missingkey = 0;}
-			
-			locks[i] = CPlayer.mo.CheckKeys(i + 1, false, true);
-			
-			if (locks[i] == true)
+			if (i is "Key" && i.Icon.IsValid())
 			{
-				switch(i)
-				{
-					case 0: keyimage = "sprites/Key Items/AKEYA0.png"; break;
-					case 1: keyimage = "sprites/Key Items/AKEYB0.png"; break;
-					case 2: keyimage = "sprites/Key Items/AKEYC0.png"; break;
-					case 3: keyimage = "sprites/Key Items/AKEYD0.png"; break;
-					case 4: keyimage = "sprites/Key Items/AKEYE0.png"; break;
-					case 5: keyimage = "sprites/Key Items/AKEYF0.png"; break;
-					case 6: keyimage = "sprites/Key Items/AKEYG0.png"; break;
-					case 7: keyimage = "sprites/Key Items/AKEYH0.png"; break;
-					default: keyimage = ""; missingkey += 1; break;
-				}
+				DrawTexture(i.Icon, keypos, DI_SCREEN_LEFT_BOTTOM|DI_ITEM_RIGHT_BOTTOM);
+				Vector2 size = TexMan.GetScaledSize(i.Icon);
+				keypos.X += size.X + 2;
 			}
-			else {keyimage = ""; missingkey += 1;}
-			
-			int keyoffset = i - missingkey;
-			
-			DrawImage(keyimage, GlobalOffset + (12 + (16 * keyoffset), -8), DI_ITEM_OFFSETS);
 		}
 		
 		//level time
