@@ -1,6 +1,6 @@
 # Box Party HUD: a HUD mod for GZDOOM
 
-This mod replaces the default GZDOOM HUD with the one from Box Party, with most features from it intact, and other features cleaned up or rewritten for better compatibility.
+This mod replaces the default GZDOOM HUD with the one from Box Party, with most features from Box Party intact, and other features cleaned up or rewritten for better compatibility.
 
 This mod is incompatible with Box Party.
 
