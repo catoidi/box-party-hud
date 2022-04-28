@@ -1,0 +1,48 @@
+//menudef.txt
+
+AddOptionMenu "OptionsMenu"
+{
+	StaticText ""
+	Submenu "Box Party HUD Options", "boxpartyhud_menu"
+}
+
+AddOptionMenu "OptionsMenuSimple"
+{
+	StaticText ""
+	Submenu "Box Party HUD Options", "boxpartyhud_menu"
+}
+
+OptionMenu "boxpartyhud_menu"
+{
+	Title "Box Party HUD Options"
+	Slider "HUD Shake", 		"box_hudshake",		0, 5, 1, 0	
+	Option "Level Time", 		"box_leveltime",	"OnOff"
+	Option "Score Counter",		"box_showscore",	"scorevalue"
+	//Option "HUD Font",			"box_hudfont",		"OnOff"
+	Option "Mugshot",			"box_mugshot",		"mugvalue"
+	Option "Armor Icon", 		"box_armoricon",	"doombox"
+	Option "Ammo Icons", 		"box_ammoicon",		"doombox"
+	Option "Always Show Armor",	"box_alwaysarmor",	"OnOff"
+	
+}
+
+OptionValue "scorevalue"
+{
+	0, "Off"
+	1, "On"
+	2, "Fade Over Time"
+}
+
+OptionValue "mugvalue"
+{
+	0, "Doom"
+	1, "Box"
+	2, "Circle"
+	3, "Triangle"
+}
+
+OptionValue "doombox"
+{
+	0, "Doom"
+	1, "Box"
+}
