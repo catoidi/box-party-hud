@@ -9,8 +9,9 @@ class BoxPartyDoomHUD : BaseStatusBar
 	HUDFont SmallFont; //default smallfont font for anything else.
 	HUDFont SBoxFont; //box party font
 	HUDFont CurrentFont; //current font chosen by user
+	cvar fontcvar;
 	
-	int secondtimer;
+	cvar mugcvar;
 	
 	//stuff
 	bool HasAmmo1;
@@ -63,7 +64,8 @@ class BoxPartyDoomHUD : BaseStatusBar
 		//smallbox is used for health/ammo bar numbers, smallfont is for everything else
 		SBoxFont = HUDFont.Create("SBoxFont");
 		SmallFont = HUDFont.Create("SmallFont");
-		CurrentFont = SBoxFont;
+		fontcvar = cvar.findcvar("box_hudfont");
+		if (fontcvar.GetBool() == true)	{CurrentFont = SBoxFont;} else {CurrentFont = SmallFont;}
 		NumberFont = HUDFont.Create("SMALLBOX");
 		
 		//set max air capacity
@@ -76,6 +78,7 @@ class BoxPartyDoomHUD : BaseStatusBar
 		BoxScoreInterpolator = DynamicValueInterpolator.Create(0, 0.25, 1, 9999999);
 		
 		shakecvar = cvar.findcvar("box_hudshake");
+		mugcvar = cvar.findcvar("box_mugshot");
 	}
 
 	override void NewGame()
@@ -152,13 +155,9 @@ class BoxPartyDoomHUD : BaseStatusBar
 		}
 		PrevScore = CPlayer.mo.score;
 		
-		//only run once a second (35 tics)
-		if (secondtimer == 0) 
-		{
-			shakecvar = cvar.findcvar("box_hudshake");
-		}
-		if (secondtimer == 35) {secondtimer = 0;}
-		secondtimer++;
+		shakecvar = cvar.findcvar("box_hudshake");
+		fontcvar = cvar.findcvar("box_hudfont");
+		if (fontcvar.GetBool() == true)	{CurrentFont = SBoxFont;} else {CurrentFont = SmallFont;}
 		
 		ScoreRespawn = true;
 		GlobalOffset = ShakeOffset + CustomOffset;
@@ -187,7 +186,14 @@ class BoxPartyDoomHUD : BaseStatusBar
 	{
 		DrawBar("graphics/HUDBARB.png", "graphics/HUDBARA.png", BoxHealthInterpolator.GetValue(), cplayer.mo.GetMaxHealth(true), GlobalOffset + PrismOffset + (-168, -32), 0, SHADER_REVERSE, DI_ITEM_OFFSETS);
 		DrawString(NumberFont, FormatNumber(cplayer.health, 0), GlobalOffset + (-48, -24), DI_ITEM_OFFSETS|DI_TEXT_ALIGN_RIGHT, Font.CR_BLACK);
-		DrawTexture(GetMugShot(1), GlobalOffset + (-36, -36), DI_ITEM_OFFSETS);
+		
+		switch (mugcvar.GetInt())
+		{
+			default: DrawTexture(GetMugShot(5), GlobalOffset + (-36, -36), DI_ITEM_OFFSETS); break;
+			case 1: DrawTexture(GetMugShot(1, MugShot.DISABLEOUCH|MugShot.DISABLERAMPAGE|MugShot.CUSTOM, "FAC"), GlobalOffset + (-32, -32), DI_ITEM_OFFSETS); break;
+			case 2: DrawTexture(GetMugShot(1, MugShot.DISABLEOUCH|MugShot.DISABLERAMPAGE|MugShot.CUSTOM, "CAC"), GlobalOffset + (-32, -32), DI_ITEM_OFFSETS); break;
+			case 3: DrawTexture(GetMugShot(1, MugShot.DISABLEOUCH|MugShot.DISABLERAMPAGE|MugShot.CUSTOM, "TAC"), GlobalOffset + (-32, -32), DI_ITEM_OFFSETS); break;
+		}
 		
 		if (BoxArmorInterpolator.GetValue() > 0) //show armor when not empty
 		{
