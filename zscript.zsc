@@ -327,6 +327,7 @@ class BoxPartyDoomHUD : BaseStatusBar
 		if (CPlayer.mo.InvSel != null && !Level.NoInventoryBar && isInventoryBarVisible() == false)
 		{
 			DrawInventoryIcon(CPlayer.mo.InvSel, GlobalOffset + (-188, -12), DI_DIMDEPLETED);
+			DrawString(CurrentFont, FormatNumber(CPlayer.mo.InvSel.Amount), GlobalOffset + (-173, -24+CurrentFont.mFont.GetHeight()), DI_TEXT_ALIGN_RIGHT, Font.CR_GOLD);
 		}
 		if (isInventoryBarVisible())
 		{
