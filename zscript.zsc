@@ -51,7 +51,7 @@ class BoxPartyDoomHUD : BaseStatusBar
 	vector2 Ammo2Offset;
 	vector2 PrismOffset; //move hp bar so that larger hp bar will show up right
 	
-	bool HideAmmo1;
+	bool HideAmmo2;
 	
 	int leveltime;
 
@@ -246,8 +246,9 @@ class BoxPartyDoomHUD : BaseStatusBar
 		bool noammo1, noammo2;
 		if (ammocount1 == 0) {noammo1 = true;} else {noammo1 = false;}
 		if (ammocount2 == 0) {noammo2 = true;} else {noammo2 = false;}
+		if (ammo1 == ammo2) {HideAmmo2 = true;} else {HideAmmo2 = false;}
 		
-		if ((ammo1 != null) && (HideAmmo1 != true))
+		if (ammo1 != null)
 		{
 			ammo1max = CPlayer.ReadyWeapon.Ammo1.MaxAmount;
 			ammo1icon = GetIcon(cplayer.readyweapon.ammo1, 0);
@@ -264,7 +265,7 @@ class BoxPartyDoomHUD : BaseStatusBar
 			HasAmmo1 = true;
 		}
 		else {HasAmmo1 = false;}
-		if (ammo2 != null)
+		if ((ammo2 != null) && (HideAmmo2 == false))
 		{
 			ammo2max = cplayer.readyweapon.ammo2.maxamount;
 			ammo2icon = GetIcon(cplayer.readyweapon.ammo2, 0);
